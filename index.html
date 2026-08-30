@@ -7,9 +7,8 @@
     
     <!-- Fontes -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
-    
-    <!-- Ícones (Font Awesome com permissões corrigidas para evitar bloqueio) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* ================= VARIÁVEIS E RESET RESPONSIVO ================= */
@@ -78,112 +77,114 @@
         .logo span { color: var(--primary-red); }
         .menu-btn { color: var(--text-white); font-size: 1.3rem; background: none; border: none; cursor: pointer; }
 
-        /* ================= 1. HERO SECTION COM A IMAGEM EXATA ================= */
+        /* ================= 1. HERO SECTION (RECRIADA EM CÓDIGO, ESTILO DA ARTE DE REFERÊNCIA) ================= */
         .hero {
-            padding-top: 60px;
-            padding-bottom: 30px;
-            background: #000;
-            border-bottom: 1px solid #1a1a1a;
-        }
-
-        .hero-banner-wrapper {
-            width: 100%;
             position: relative;
-            background: #000;
-            border-radius: 8px;
+            padding-top: 90px;
+            padding-bottom: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 40%, var(--bg-dark) 100%),
+                        url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2000&auto=format&fit=crop') center 30%/cover no-repeat;
             overflow: hidden;
-            border: 1px solid #1a1a1a;
         }
 
-        .hero-banner-wrapper img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            display: block;
+        /* Barra superior: redes sociais + tagline */
+        .hero-topbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .hero-social { display: flex; align-items: center; gap: 14px; font-size: 1rem; }
+        .hero-social a { color: #fff; opacity: 0.9; }
+        .hero-social span { font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; color: var(--text-gray); }
+        .hero-tagline {
+            font-size: 0.7rem; font-weight: 900; font-style: italic; text-transform: uppercase;
+            color: var(--primary-red); text-align: right; line-height: 1.3; letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
         }
 
-        /* BLOCOS DE AÇÃO EM ESTILO NEON (MATCH COM A ARTE) */
+        /* Título principal com efeito "pincelado" */
+        .hero-crown { text-align: center; color: var(--primary-red); font-size: 1.8rem; margin-bottom: 6px; filter: drop-shadow(0 0 8px rgba(255,0,0,0.6)); }
+        .hero-title-wrap { text-align: center; margin-bottom: 25px; }
+        .hero-main-title {
+            font-size: clamp(2.4rem, 11vw, 5.5rem);
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            line-height: 0.95;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.9);
+        }
+        .hero-main-title .accent { color: var(--primary-red); }
+        .hero-subtitle {
+            font-size: clamp(0.7rem, 2vw, 0.95rem);
+            font-weight: 800; letter-spacing: 4px; text-transform: uppercase; color: #ddd; margin-top: 8px;
+        }
+
+        /* Faixa de 3 itens (cultura / amigos / movimento) */
+        .hero-strip {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 20px;
+            padding: 16px 0; margin-top: 10px; font-size: 0.72rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; color: #eee;
+        }
+        .hero-strip span { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .hero-strip i { color: var(--primary-red); }
+        .hero-strip .divider { color: #444; }
+
+        /* Cards de ação (Produtos / Ingressos / Eventos) — só vermelho/preto */
         .hero-actions-container {
             display: grid;
             grid-template-columns: 1fr;
             gap: 12px;
-            margin-top: 15px;
+            padding: 20px 0 30px;
+            position: relative;
+            z-index: 5;
         }
-
         @media (min-width: 768px) {
-            .hero-actions-container {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 15px;
-                margin-top: -30px; 
-                position: relative;
-                z-index: 10;
-            }
+            .hero-actions-container { grid-template-columns: repeat(3, 1fr); gap: 15px; }
         }
 
         .action-card {
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(10, 10, 10, 0.85);
+            border: 1.5px solid var(--primary-red);
+            box-shadow: 0 0 18px rgba(255,0,0,0.15);
             border-radius: 10px;
-            padding: 16px 20px;
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             gap: 15px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
         }
-
-        .action-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .action-card.card-produtos {
-            border: 1.5px solid var(--neon-purple);
-            box-shadow: 0 0 15px rgba(155, 81, 224, 0.2);
-        }
-        .action-card.card-ingressos {
-            border: 1.5px solid var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
-        }
-        .action-card.card-eventos {
-            border: 1.5px solid var(--neon-gold);
-            box-shadow: 0 0 15px rgba(255, 153, 0, 0.2);
-        }
+        .action-card:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(255,0,0,0.3); }
 
         .action-icon {
-            font-size: 1.8rem;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            flex-shrink: 0;
+            font-size: 1.6rem;
+            width: 46px; height: 46px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; flex-shrink: 0;
+            color: var(--primary-red);
+            background: rgba(255,0,0,0.12);
         }
+        .action-info h3 { font-size: 1.02rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 2px; }
+        .action-info p { font-size: 0.75rem; color: var(--text-gray); font-weight: 500; }
+        .action-arrow { margin-left: auto; color: var(--text-gray); font-size: 0.9rem; }
 
-        .card-produtos .action-icon { color: var(--neon-purple); background: rgba(155, 81, 224, 0.1); }
-        .card-ingressos .action-icon { color: var(--neon-blue); background: rgba(0, 210, 255, 0.1); }
-        .card-eventos .action-icon { color: var(--neon-gold); background: rgba(255, 153, 0, 0.1); }
-
-        .action-info h3 {
-            font-size: 1.05rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            line-height: 1.2;
-            margin-bottom: 2px;
+        /* Faixa inferior: lema + localização */
+        .hero-bottombar {
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+            gap: 12px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08);
         }
-
-        .action-info p {
-            font-size: 0.75rem;
-            color: var(--text-gray);
-            font-weight: 500;
+        .hero-motto { font-size: 0.85rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 1px; }
+        .hero-motto span { color: var(--primary-red); }
+        .hero-location {
+            display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 800;
+            text-transform: uppercase; border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 30px;
         }
-
-        .action-arrow {
-            margin-left: auto;
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
+        .hero-location i { color: var(--primary-red); }
+        .hero-scroll-hint { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: var(--text-gray); text-align: center; padding-bottom: 16px; }
 
         /* ================= 2. PRÓXIMO EVENTO ================= */
         .event-flyer { width: 100%; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color); }
@@ -323,16 +324,34 @@
     </header>
 
     <!-- ========================================================= -->
-    <!-- 1. HERO SECTION: BANNER COMPLETO + BLOCOS NEON INTERATIVOS -->
+    <!-- 1. HERO SECTION (RECRIADA EM CÓDIGO, ESTILO DA ARTE DE REFERÊNCIA) -->
     <!-- ========================================================= -->
     <section class="hero" id="home">
         <div class="container">
-            <!-- BANNER OFICIAL COM O NOME EXATO DO ARQUIVO -->
-            <div class="hero-banner-wrapper">
-                <img src="1000139734.jpg" alt="Underground RJ - Encontros Automotivos">
+            <div class="hero-topbar">
+                <div class="hero-social">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <span>/UNDERGROUNDRJ</span>
+                </div>
+                <div class="hero-tagline">PAIXÃO QUE<br>MOVE CULTURAS!</div>
             </div>
 
-            <!-- CARDS DE AÇÃO INTEGRADOS EM FORMATO NEON -->
+            <div class="hero-crown"><i class="fa-solid fa-crown"></i></div>
+            <div class="hero-title-wrap">
+                <h1 class="hero-main-title">UNDERGROUND<br><span class="accent">RJ</span></h1>
+                <p class="hero-subtitle">Eventos Automotivos</p>
+            </div>
+
+            <div class="hero-strip">
+                <span><i class="fa-solid fa-shield-halved"></i> CULTURA SOBRE RODAS</span>
+                <span class="divider">|</span>
+                <span><i class="fa-solid fa-users"></i> AMIGOS · CARROS · MÚSICA</span>
+                <span class="divider">|</span>
+                <span><i class="fa-solid fa-bolt"></i> UM MOVIMENTO REAL</span>
+            </div>
+
             <div class="hero-actions-container">
                 <div class="action-card card-produtos" onclick="openModal('modal-produto')">
                     <div class="action-icon"><i class="fa-solid fa-cart-shopping"></i></div>
@@ -361,6 +380,12 @@
                     <div class="action-arrow"><i class="fa-solid fa-chevron-right"></i></div>
                 </div>
             </div>
+
+            <div class="hero-bottombar">
+                <div class="hero-motto">Juntos somos <span>mais fortes!</span></div>
+                <div class="hero-location"><i class="fa-solid fa-location-dot"></i> Rio de Janeiro - RJ</div>
+            </div>
+            <div class="hero-scroll-hint">Scroll para explorar ⌄</div>
         </div>
     </section>
 
@@ -372,8 +397,7 @@
                     <div class="section-subtitle">SAVE THE DATE</div>
                     <h2 class="section-title">PRÓXIMO EVENTO</h2>
                 </div>
-                <!-- Substituir por sua imagem local posteriormente -->
-                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Flyer Evento" class="event-flyer">
+                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1000&auto=format&fit=crop" alt="Flyer Evento" class="event-flyer">
             </div>
             
             <div class="event-details">
@@ -450,8 +474,7 @@
             </div>
             
             <div>
-                <!-- Substituir por sua imagem local posteriormente -->
-                <img src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Saveiro Cross modificada" class="gallery-img">
+                <img src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=1000&auto=format&fit=crop" alt="Saveiro Cross modificada" class="gallery-img">
                 <div class="gallery-caption">FOTO UNDERGROUND RJ</div>
             </div>
         </div>
@@ -461,8 +484,7 @@
     <section>
         <div class="container grid-2">
             <div class="machine-img">
-                <!-- Substituir por sua imagem local posteriormente -->
-                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Nissan Fairlady" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1000&auto=format&fit=crop" alt="Nissan Fairlady" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">
                 <div class="badge-machine"><i class="fa-solid fa-fire"></i> MÁQUINA DO MÊS</div>
             </div>
 
@@ -495,8 +517,7 @@
             </div>
             
             <div class="video-container">
-                <!-- Substituir por sua imagem local posteriormente -->
-                <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&amp;w=600&amp;auto=format&amp;fit=crop" alt="Thumb Video">
+                <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=600&auto=format&fit=crop" alt="Thumb Video">
                 <div style="position:absolute; top: 15px; right: 15px; border: 1px solid var(--primary-red); color: var(--primary-red); padding: 4px 10px; font-size: 0.7rem; font-weight: 800; border-radius: 3px;"><i class="fa-solid fa-play"></i> AMPLIAR</div>
                 <div class="play-btn"><i class="fa-solid fa-play"></i></div>
                 <div class="video-controls">
@@ -530,8 +551,7 @@
 
             <div class="map-container">
                 <div class="map-badge"><i class="fa-solid fa-location-dot"></i> RIO DE JANEIRO • RJ</div>
-                <!-- Substituir por sua imagem local posteriormente -->
-                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Mapa do Rio de Janeiro">
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000&auto=format&fit=crop" alt="Mapa do Rio de Janeiro">
             </div>
         </div>
     </section>
@@ -591,7 +611,7 @@
                         <span class="faq-icon">–</span>
                     </div>
                     <div class="faq-body">
-                        Assim que o pagamento é aprovado, o ingresso é gerado na hora e enviado para o seu e-mail com QR Code.
+                        Assim que o pagamento é aprovado, o ingresso é gerado na hora e enviado para o seu e-mail.
                     </div>
                 </div>
 
@@ -699,25 +719,25 @@
             
             <div class="modal-produtos-grid">
                 <div class="m-produto">
-                    <i class="fa-solid fa-shirt" style="color: var(--neon-purple);"></i>
+                    <i class="fa-solid fa-shirt" style="color: var(--primary-red);"></i>
                     <h4>Camiseta Box</h4>
                     <p>R$ 79,90</p>
                     <button class="btn btn-outline" style="padding: 8px; font-size: 0.75rem; margin: 0;">COMPRAR</button>
                 </div>
                 <div class="m-produto">
-                    <i class="fa-solid fa-hat-cowboy" style="color: var(--neon-purple);"></i>
+                    <i class="fa-solid fa-hat-cowboy" style="color: var(--primary-red);"></i>
                     <h4>Boné Snapback</h4>
                     <p>R$ 69,90</p>
                     <button class="btn btn-outline" style="padding: 8px; font-size: 0.75rem; margin: 0;">COMPRAR</button>
                 </div>
                 <div class="m-produto">
-                    <i class="fa-solid fa-note-sticky" style="color: var(--neon-purple);"></i>
+                    <i class="fa-solid fa-note-sticky" style="color: var(--primary-red);"></i>
                     <h4>Adesivo Refletivo</h4>
                     <p>R$ 15,00</p>
                     <button class="btn btn-outline" style="padding: 8px; font-size: 0.75rem; margin: 0;">COMPRAR</button>
                 </div>
                 <div class="m-produto">
-                    <i class="fa-solid fa-key" style="color: var(--neon-purple);"></i>
+                    <i class="fa-solid fa-key" style="color: var(--primary-red);"></i>
                     <h4>Chaveiro Fita</h4>
                     <p>R$ 25,00</p>
                     <button class="btn btn-outline" style="padding: 8px; font-size: 0.75rem; margin: 0;">COMPRAR</button>
