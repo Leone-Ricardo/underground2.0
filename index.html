@@ -41,36 +41,55 @@
         img { max-width: 100%; height: auto; display: block; }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
-        /* ================= TELA DE ENTRADA (VÍDEO REALISTA) ================= */
+        /* ================= TELA DE ENTRADA (FOTO + VÍDEO) ================= */
         #splash-screen {
             position: fixed; inset: 0; z-index: 9999;
             background: var(--bg-dark);
             transition: opacity 0.8s ease;
         }
 
-        /* O vídeo ocupa o fundo inteiro */
+        /* O vídeo fica engatilhado no fundo da página 100% do tempo */
         #splash-video {
             position: absolute; width: 100%; height: 100%;
             object-fit: cover; z-index: 1;
         }
 
-        /* Película escura por cima do vídeo para destacar o botão, fica clara ao acelerar */
-        #video-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.75);
-            z-index: 2; transition: background 1.5s ease;
+        /* A foto do evento que você mandou, cobrindo o vídeo até o momento do clique */
+        #intro-bg-image {
+            position: absolute; inset: 0; 
+            background: url('https://i.postimg.cc/SKb9k1Hf/underground-rj.jpg') center/cover no-repeat; 
+            z-index: 2; transition: opacity 0.5s ease;
         }
 
-        /* Container do Título e Botão */
+        /* Película escura por cima para os botões e textos ficarem legíveis */
+        #video-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.75);
+            z-index: 3; transition: background 1.5s ease;
+        }
+
+        /* Container do Título, Botão e Tópicos */
         #scene-intro {
             position: absolute; inset: 0; z-index: 10;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; transition: opacity 0.5s ease;
+            padding: 0 20px;
         }
 
         .splash-title { font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-red); margin-bottom: 8px; text-shadow: 0 0 15px rgba(255,0,0,0.8); animation: fade-in-up 1s ease-out forwards; }
         .splash-subtitle { font-size: clamp(0.8rem, 3vw, 1.2rem); color: var(--text-gray); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; margin-bottom: 40px; animation: fade-in-up 1s ease-out forwards; animation-delay: 0.2s; opacity: 0; }
         
         .splash-btn { background: transparent; color: var(--primary-red); border: 2px solid var(--primary-red); padding: 16px 45px; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; border-radius: 6px; cursor: pointer; box-shadow: 0 0 15px rgba(255,0,0,0.3), inset 0 0 10px rgba(255,0,0,0.1); transition: all 0.2s ease; opacity: 0; animation: fade-in-up 1s ease-out forwards; animation-delay: 0.4s; }
+        
+        /* Os 3 Tópicos da Cultura na Tela de Entrada */
+        .splash-strip {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 20px;
+            margin-top: 40px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1px; color: #eee; opacity: 0;
+            animation: fade-in-up 1s ease-out forwards; animation-delay: 0.6s;
+        }
+        .splash-strip span { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .splash-strip i { color: var(--primary-red); }
+        .splash-strip .divider { color: #555; }
 
         @keyframes fade-in-up {
             0% { opacity: 0; transform: translateY(30px); }
@@ -241,24 +260,37 @@
 </head>
 <body class="locked-scroll">
 
-    <!-- ================= SPLASH SCREEN COM VÍDEO REAL ================= -->
+    <!-- ================= SPLASH SCREEN (FOTO -> VÍDEO REAL) ================= -->
     <div id="splash-screen">
         
-        <!-- O VÍDEO NO FUNDO DA TELA -->
+        <!-- O VÍDEO NO FUNDO DA TELA (Escondido atrás da foto inicialmente) -->
         <video id="splash-video" preload="auto" muted playsinline>
             <source src="https://files.catbox.moe/xpgf9d.mp4" type="video/mp4">
         </video>
 
-        <!-- Película Escura para destacar os botões antes do clique -->
+        <!-- A FOTO DE ENTRADA -->
+        <div id="intro-bg-image"></div>
+
+        <!-- Película Escura para destacar os textos/botão -->
         <div id="video-overlay"></div>
 
-        <!-- TÍTULO E BOTÃO SOBREPOSTOS -->
+        <!-- TÍTULO, BOTÃO E TÓPICOS -->
         <div id="scene-intro">
             <h1 class="splash-title">Underground RJ</h1>
             <p class="splash-subtitle">Night · Street · Culture</p>
+            
             <button id="ignite-btn" class="splash-btn">
                 Entrar no Site
             </button>
+
+            <!-- Os 3 Tópicos Oficiais do Site -->
+            <div class="splash-strip">
+                <span><i class="fa-solid fa-shield-halved"></i> Cultura Sobre Rodas</span>
+                <span class="divider">|</span>
+                <span><i class="fa-solid fa-users"></i> Amigos · Carros · Música</span>
+                <span class="divider">|</span>
+                <span><i class="fa-solid fa-bolt"></i> Um Movimento Real</span>
+            </div>
         </div>
 
     </div>
@@ -269,7 +301,7 @@
         <source src="https://media.vocaroo.com/mp3/1dXEzQz8HZ93" type="audio/mpeg">
     </audio>
     
-    <!-- Áudio 2: Aquecimento rápido (Hover) -->
+    <!-- Áudio 2: Aquecimento rápido (Hover/Touch) -->
     <audio id="hover-rev-sound" preload="auto">
         <source src="https://assets.mixkit.co/active_storage/sfx/1569/1569-preview.mp3" type="audio/mpeg">
     </audio>
@@ -751,46 +783,50 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // ================= 1. JAVASCRIPT DA ENTRADA CINEMÁTICA (VÍDEO REAL) =================
+            // ================= 1. JAVASCRIPT DA ENTRADA (FOTO -> VÍDEO) =================
             const splashBtn = document.getElementById('ignite-btn');
             
-            const engineSound = document.getElementById('engine-sound'); // Áudio do V8
-            const hoverSound = document.getElementById('hover-rev-sound'); // Áudio rápido no Hover
-            const splashVideo = document.getElementById('splash-video'); // O vídeo do Catbox
+            const engineSound = document.getElementById('engine-sound'); 
+            const hoverSound = document.getElementById('hover-rev-sound');
+            const splashVideo = document.getElementById('splash-video');
             
             const sceneIntro = document.getElementById('scene-intro');
+            const introBgImage = document.getElementById('intro-bg-image');
             const videoOverlay = document.getElementById('video-overlay');
             const splashScreen = document.getElementById('splash-screen');
 
-            // Ajuste dos volumes para ficar com aquela pressão sonora sem estourar o falante
             if(engineSound) engineSound.volume = 0.9;
             if(hoverSound) hoverSound.volume = 0.4;
 
             if(splashBtn) {
-                // Efeito Rápido ao Passar o Mouse (Rev)
-                splashBtn.addEventListener('mouseenter', () => {
+                // Efeito Rápido ao Passar o Mouse ou Tocar
+                const playHover = () => {
                     hoverSound.currentTime = 0;
                     hoverSound.play().catch(() => {});
                     splashBtn.style.transform = "scale(1.05)";
                     splashBtn.style.boxShadow = "0 0 30px rgba(255,0,0,0.8)";
-                });
-
-                // Tira o efeito quando o mouse sai
-                splashBtn.addEventListener('mouseleave', () => {
+                };
+                
+                const stopHover = () => {
                     hoverSound.pause();
                     splashBtn.style.transform = "scale(1)";
                     splashBtn.style.boxShadow = "0 0 15px rgba(255,0,0,0.3)";
-                });
+                };
+
+                splashBtn.addEventListener('mouseenter', playHover);
+                splashBtn.addEventListener('mouseleave', stopHover);
+                splashBtn.addEventListener('touchstart', playHover, {passive: true});
+                splashBtn.addEventListener('touchend', stopHover);
 
                 // CLIQUE: O Arranque!
                 splashBtn.addEventListener('click', () => {
-                    // Para o áudio curto de hover para o V8 entrar limpo
                     hoverSound.pause();
                     
-                    // 1. Esconde o botão e o título suavemente
+                    // 1. Esconde a foto, os textos e o botão instantaneamente
                     sceneIntro.style.opacity = '0';
+                    introBgImage.style.opacity = '0'; // A FOTO SOME E REVELA O VÍDEO
                     
-                    // 2. Clareia a película preta para o vídeo brilhar mais forte
+                    // 2. Clareia a película preta para o vídeo brilhar mais
                     videoOverlay.style.background = "rgba(0,0,0,0.1)";
 
                     // 3. Dá o Play no Áudio V8 e no Vídeo simultaneamente
@@ -798,12 +834,11 @@
                     engineSound.play().catch(e => console.log('Áudio bloqueado.'));
                     splashVideo.play().catch(e => console.log('Vídeo bloqueado.'));
                     
-                    // 4. Libera o site no momento exato em que a tela pisca de vermelho (8 segundos)
+                    // 4. Libera o site no fim do vídeo (8 segundos)
                     setTimeout(() => {
-                        splashScreen.style.opacity = '0'; // A tela inteira fica invisível
-                        document.body.classList.remove('locked-scroll'); // Destrava o site por baixo
+                        splashScreen.style.opacity = '0'; 
+                        document.body.classList.remove('locked-scroll');
                         
-                        // Remove o splash totalmente do DOM para não atrapalhar o clique
                         setTimeout(() => {
                             splashScreen.style.display = 'none'; 
                         }, 800);
