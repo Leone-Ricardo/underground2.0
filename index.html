@@ -33,97 +33,51 @@
             line-height: 1.5; scroll-behavior: smooth;
         }
 
-        /* Trava a rolagem na tela de entrada */
+        /* Trava a rolagem enquanto a tela de entrada estiver ativa */
         body.locked-scroll { overflow: hidden !important; }
+        
         a { text-decoration: none; color: inherit; cursor: pointer; }
         ul { list-style: none; }
         img { max-width: 100%; height: auto; display: block; }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
-        /* ================= TELA DE ENTRADA (SPLASH SCREEN CINEMÁTICA) ================= */
+        /* ================= TELA DE ENTRADA (VÍDEO REALISTA) ================= */
         #splash-screen {
             position: fixed; inset: 0; z-index: 9999;
-            background: radial-gradient(circle at center, rgba(30,0,0,1) 0%, var(--bg-dark) 100%);
+            background: var(--bg-dark);
+            transition: opacity 0.8s ease;
+        }
+
+        /* O vídeo ocupa o fundo inteiro */
+        #splash-video {
+            position: absolute; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1;
+        }
+
+        /* Película escura por cima do vídeo para destacar o botão, fica clara ao acelerar */
+        #video-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.75);
+            z-index: 2; transition: background 1.5s ease;
+        }
+
+        /* Container do Título e Botão */
+        #scene-intro {
+            position: absolute; inset: 0; z-index: 10;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; transition: opacity 0.8s ease; overflow: hidden;
+            text-align: center; transition: opacity 0.5s ease;
         }
+
+        .splash-title { font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-red); margin-bottom: 8px; text-shadow: 0 0 15px rgba(255,0,0,0.8); animation: fade-in-up 1s ease-out forwards; }
+        .splash-subtitle { font-size: clamp(0.8rem, 3vw, 1.2rem); color: var(--text-gray); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; margin-bottom: 40px; animation: fade-in-up 1s ease-out forwards; animation-delay: 0.2s; opacity: 0; }
         
-        .splash-scanlines::before {
-            content: " "; display: block; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-            background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.35) 50%), linear-gradient(90deg, rgba(255,0,0,0.04), rgba(0,255,0,0.01), rgba(0,0,255,0.04));
-            background-size: 100% 2px, 3px 100%;
+        .splash-btn { background: transparent; color: var(--primary-red); border: 2px solid var(--primary-red); padding: 16px 45px; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; border-radius: 6px; cursor: pointer; box-shadow: 0 0 15px rgba(255,0,0,0.3), inset 0 0 10px rgba(255,0,0,0.1); transition: all 0.2s ease; opacity: 0; animation: fade-in-up 1s ease-out forwards; animation-delay: 0.4s; }
+
+        @keyframes fade-in-up {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-
-        /* Cenas (Para alternar entre Titulo -> Painel -> Pista) */
-        .scene {
-            position: absolute; inset: 0; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; z-index: 10;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
-        .scene.active { opacity: 1; pointer-events: auto; }
-
-        /* --- CENA 1: Título e Botão --- */
-        .splash-title { font-size: clamp(3rem, 10vw, 5.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-red); margin-bottom: 8px; text-shadow: 0 0 15px rgba(255,0,0,0.8); }
-        .splash-subtitle { font-size: clamp(0.8rem, 3vw, 1.2rem); color: var(--text-gray); letter-spacing: 4px; text-transform: uppercase; font-weight: 600; margin-bottom: 40px; }
-        .splash-btn { background: transparent; color: var(--primary-red); border: 2px solid var(--primary-red); padding: 16px 45px; font-size: 1.1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; border-radius: 6px; cursor: pointer; box-shadow: 0 0 15px rgba(255,0,0,0.3), inset 0 0 10px rgba(255,0,0,0.1); transition: all 0.2s ease; }
-
-        /* --- CENA 2: O Painel (Dashboard) --- */
-        .dashboard-text { color: var(--primary-red); font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 900; font-style: italic; margin-bottom: 50px; text-transform: uppercase; animation: pulse-text 0.5s infinite alternate; }
-        @keyframes pulse-text { 0% { text-shadow: 0 0 10px red; } 100% { text-shadow: 0 0 30px red, 0 0 10px white; } }
-        
-        .speedometer { width: 300px; height: 150px; border: 8px solid #333; border-bottom: 0; border-radius: 300px 300px 0 0; position: relative; background: radial-gradient(circle at bottom, #1a0000, #000); box-shadow: inset 0 0 40px rgba(255,0,0,0.3), 0 0 50px rgba(255,0,0,0.6); }
-        .speed-center { width: 60px; height: 30px; background: #222; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); border-radius: 60px 60px 0 0; border: 2px solid #555; border-bottom: 0; z-index: 5; }
-        .needle { width: 4px; height: 130px; background: #fff; position: absolute; bottom: 0; left: 50%; transform-origin: bottom center; transform: translateX(-50%) rotate(-80deg); box-shadow: 0 0 15px red, 0 0 5px white; z-index: 4; }
-        
-        .animate-needle { animation: rev-needle 4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        @keyframes rev-needle {
-            0% { transform: translateX(-50%) rotate(-80deg); }
-            15% { transform: translateX(-50%) rotate(-20deg); }
-            25% { transform: translateX(-50%) rotate(-40deg); }
-            45% { transform: translateX(-50%) rotate(30deg); }
-            60% { transform: translateX(-50%) rotate(-10deg); }
-            75% { transform: translateX(-50%) rotate(70deg); }
-            85% { transform: translateX(-50%) rotate(50deg); }
-            100% { transform: translateX(-50%) rotate(90deg); background: #ff0000; } /* Cortando giro no vermelho */
-        }
-
-        /* --- CENA 3: Carro na Pista 3D --- */
-        #scene-track { perspective: 800px; background: #000; }
-        .horizon { position: absolute; top: 0; width: 100%; height: 50%; background: linear-gradient(to bottom, #020202 0%, #150000 100%); border-bottom: 2px solid var(--primary-red); box-shadow: 0 5px 30px red; z-index: 1; }
-        .road-perspective { position: absolute; bottom: 0; width: 100%; height: 50%; perspective: 1000px; z-index: 2; overflow: hidden; }
-        .road-grid { position: absolute; bottom: -50%; left: -50%; width: 200%; height: 200%;
-            background-image: linear-gradient(rgba(255,0,0,0.4) 2px, transparent 2px), linear-gradient(90deg, rgba(255,0,0,0.4) 2px, transparent 2px);
-            background-size: 50px 50px; transform: rotateX(75deg); animation: grid-move 0.15s linear infinite;
-        }
-        @keyframes grid-move { 0% { background-position: 0 0; } 100% { background-position: 0 50px; } }
-
-        .car-body { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); width: 260px; height: 90px; background: #080808; border-radius: 40px 40px 15px 15px; border: 2px solid #222; display: flex; justify-content: space-between; align-items: center; padding: 0 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 10px 20px rgba(255,255,255,0.05); z-index: 5; }
-        .taillight { width: 35px; height: 35px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 40px 15px rgba(255,0,0,0.8), inset 0 0 15px #fff; animation: taillight-pulse 0.05s infinite alternate; }
-        .plate { position: absolute; left: 50%; transform: translateX(-50%); background: #ccc; color: #000; padding: 3px 12px; font-weight: 900; font-size: 0.8rem; border-radius: 3px; box-shadow: inset 0 0 8px rgba(0,0,0,0.6); }
-        @keyframes taillight-pulse { 0% { box-shadow: 0 0 30px 10px rgba(255,0,0,0.8); } 100% { box-shadow: 0 0 60px 25px rgba(255,0,0,1), inset 0 0 20px #fff; } }
-
-        .animate-car { animation: car-zoom-away 3.5s cubic-bezier(0.5, 0, 0.2, 1) forwards; }
-        @keyframes car-zoom-away {
-            0% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; }
-            15% { transform: translateX(-50%) scale(1.05) translateY(10px); opacity: 1; } /* Abaixa a traseira engatando marcha */
-            85% { transform: translateX(-50%) scale(0.01) translateY(-300px); opacity: 0.8; } /* Some no horizonte */
-            100% { transform: translateX(-50%) scale(0) translateY(-400px); opacity: 0; }
-        }
-
-        /* --- EFEITOS GLOBAIS DE LUZ E TREMOR --- */
-        #flash-overlay { position: fixed; inset: 0; background-color: #fff; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in; mix-blend-mode: overlay; }
-        .ignite-flash { background-color: #ff0000 !important; opacity: 1 !important; mix-blend-mode: normal !important; transition: opacity 0.1s ease-out !important; }
-        
-        .shake-intense { animation: extreme-shake 0.08s infinite; }
-        @keyframes extreme-shake {
-            0% { transform: translate(0, 0); } 25% { transform: translate(-4px, 3px); }
-            50% { transform: translate(4px, -3px); } 75% { transform: translate(-4px, -3px); }
-            100% { transform: translate(3px, 4px); }
-        }
-
 
         /* ================= COMPONENTES ORIGINAIS DO SITE ================= */
-        /* Todo o seu CSS original intocado daqui para baixo */
         .btn { display: block; width: 100%; padding: 14px; text-align: center; font-weight: 800; text-transform: uppercase; border-radius: 6px; border: none; cursor: pointer; font-size: 0.9rem; margin-bottom: 12px; transition: 0.3s ease; }
         .btn-red { background: var(--primary-red); color: white; }
         .btn-red:hover { background: #cc0000; box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
@@ -287,14 +241,19 @@
 </head>
 <body class="locked-scroll">
 
-    <!-- ================= CAMADA DE FLASH VERMELHO ================= -->
-    <div id="flash-overlay"></div>
-
-    <!-- ================= SPLASH SCREEN CINEMÁTICA ================= -->
-    <div id="splash-screen" class="splash-scanlines">
+    <!-- ================= SPLASH SCREEN COM VÍDEO REAL ================= -->
+    <div id="splash-screen">
         
-        <!-- CENA 1: Título Original -->
-        <div id="scene-intro" class="scene active">
+        <!-- O VÍDEO NO FUNDO DA TELA -->
+        <video id="splash-video" preload="auto" muted playsinline>
+            <source src="https://files.catbox.moe/xpgf9d.mp4" type="video/mp4">
+        </video>
+
+        <!-- Película Escura para destacar os botões antes do clique -->
+        <div id="video-overlay"></div>
+
+        <!-- TÍTULO E BOTÃO SOBREPOSTOS -->
+        <div id="scene-intro">
             <h1 class="splash-title">Underground RJ</h1>
             <p class="splash-subtitle">Night · Street · Culture</p>
             <button id="ignite-btn" class="splash-btn">
@@ -302,27 +261,6 @@
             </button>
         </div>
 
-        <!-- CENA 2: O Painel -->
-        <div id="scene-dashboard" class="scene">
-            <h2 class="dashboard-text">ACELERANDO...</h2>
-            <div class="speedometer">
-                <div class="needle" id="speed-needle"></div>
-                <div class="speed-center"></div>
-            </div>
-        </div>
-
-        <!-- CENA 3: Carro na Pista -->
-        <div id="scene-track" class="scene">
-            <div class="horizon"></div>
-            <div class="road-perspective">
-                <div class="road-grid"></div>
-            </div>
-            <div class="car-body" id="racing-car">
-                <div class="taillight"></div>
-                <div class="plate">UG-RJ</div>
-                <div class="taillight"></div>
-            </div>
-        </div>
     </div>
 
     <!-- ================= ÁUDIOS ================= -->
@@ -331,18 +269,18 @@
         <source src="https://media.vocaroo.com/mp3/1dXEzQz8HZ93" type="audio/mpeg">
     </audio>
     
-    <!-- Áudio 2: Aquecimento rápido (Toda vez que passar o mouse ou segurar) -->
+    <!-- Áudio 2: Aquecimento rápido (Hover) -->
     <audio id="hover-rev-sound" preload="auto">
         <source src="https://assets.mixkit.co/active_storage/sfx/1569/1569-preview.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- HEADER (ORIGINAL) -->
+    <!-- ================= CABEÇALHO DO SITE ORIGINAL ================= -->
     <header>
         <div class="logo">UNDERGROUND<span>RJ</span></div>
         <button class="menu-btn"><i class="fa-solid fa-bars"></i></button>
     </header>
 
-    <!-- 1. HERO SECTION (ORIGINAL) -->
+    <!-- 1. HERO SECTION -->
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-topbar">
@@ -725,7 +663,7 @@
     <!-- WHATSAPP FLOAT -->
     <a href="https://wa.me/5521987119717" target="_blank" class="whatsapp-float"><i class="fa-brands fa-whatsapp"></i></a>
 
-    <!-- ================= MODAIS (ORIGINAL) ================= -->
+    <!-- ================= MODAIS ================= -->
     <div class="modal-overlay" id="modal-produto">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal('modal-produto')">&times;</button>
@@ -813,80 +751,59 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // ================= 1. JAVASCRIPT CINEMÁTICO =================
+            // ================= 1. JAVASCRIPT DA ENTRADA CINEMÁTICA (VÍDEO REAL) =================
             const splashBtn = document.getElementById('ignite-btn');
             
-            // Cenas e Elementos
+            const engineSound = document.getElementById('engine-sound'); // Áudio do V8
+            const hoverSound = document.getElementById('hover-rev-sound'); // Áudio rápido no Hover
+            const splashVideo = document.getElementById('splash-video'); // O vídeo do Catbox
+            
             const sceneIntro = document.getElementById('scene-intro');
-            const sceneDashboard = document.getElementById('scene-dashboard');
-            const sceneTrack = document.getElementById('scene-track');
-            const speedNeedle = document.getElementById('speed-needle');
-            const racingCar = document.getElementById('racing-car');
-            const flash = document.getElementById('flash-overlay');
+            const videoOverlay = document.getElementById('video-overlay');
             const splashScreen = document.getElementById('splash-screen');
 
-            // Áudios
-            const engineSound = document.getElementById('engine-sound'); // V8 longo
-            const hoverSound = document.getElementById('hover-rev-sound'); // Rev curto
+            // Ajuste dos volumes para ficar com aquela pressão sonora sem estourar o falante
             if(engineSound) engineSound.volume = 0.9;
             if(hoverSound) hoverSound.volume = 0.4;
 
-            // Função para a Acelerada Curta (Hover / Touch)
-            const playShortRev = () => {
-                hoverSound.currentTime = 0;
-                hoverSound.play().catch(() => {});
-                splashBtn.style.transform = "scale(1.05)";
-                splashBtn.style.boxShadow = "0 0 30px rgba(255,0,0,0.8)";
-            };
-
-            const stopShortRev = () => {
-                hoverSound.pause();
-                splashBtn.style.transform = "scale(1)";
-                splashBtn.style.boxShadow = "0 0 15px rgba(255,0,0,0.3)";
-            };
-
-            // Aplica acelerada curta no Hover e Toque de Celular
             if(splashBtn) {
-                splashBtn.addEventListener('mouseenter', playShortRev);
-                splashBtn.addEventListener('mouseleave', stopShortRev);
-                splashBtn.addEventListener('touchstart', playShortRev, {passive: true});
-                splashBtn.addEventListener('touchend', stopShortRev);
+                // Efeito Rápido ao Passar o Mouse (Rev)
+                splashBtn.addEventListener('mouseenter', () => {
+                    hoverSound.currentTime = 0;
+                    hoverSound.play().catch(() => {});
+                    splashBtn.style.transform = "scale(1.05)";
+                    splashBtn.style.boxShadow = "0 0 30px rgba(255,0,0,0.8)";
+                });
 
-                // O CLIQUE (A Máquina Liga)
-                splashBtn.addEventListener('click', () => {
-                    // Corta o áudio curto e inicia o V8 potente
+                // Tira o efeito quando o mouse sai
+                splashBtn.addEventListener('mouseleave', () => {
                     hoverSound.pause();
+                    splashBtn.style.transform = "scale(1)";
+                    splashBtn.style.boxShadow = "0 0 15px rgba(255,0,0,0.3)";
+                });
+
+                // CLIQUE: O Arranque!
+                splashBtn.addEventListener('click', () => {
+                    // Para o áudio curto de hover para o V8 entrar limpo
+                    hoverSound.pause();
+                    
+                    // 1. Esconde o botão e o título suavemente
+                    sceneIntro.style.opacity = '0';
+                    
+                    // 2. Clareia a película preta para o vídeo brilhar mais forte
+                    videoOverlay.style.background = "rgba(0,0,0,0.1)";
+
+                    // 3. Dá o Play no Áudio V8 e no Vídeo simultaneamente
                     engineSound.currentTime = 0;
-                    engineSound.play().catch(e => console.log('Áudio principal bloqueado.'));
+                    engineSound.play().catch(e => console.log('Áudio bloqueado.'));
+                    splashVideo.play().catch(e => console.log('Vídeo bloqueado.'));
                     
-                    // Remove o Intro
-                    sceneIntro.classList.remove('active');
-                    
-                    // === ATO 1: O PAINEL (0s) ===
-                    sceneDashboard.classList.add('active');
-                    splashScreen.classList.add('shake-intense');
-                    speedNeedle.classList.add('animate-needle');
-
-                    // === ATO 2: A PISTA (Aos 4 Segundos) ===
+                    // 4. Libera o site no momento exato em que a tela pisca de vermelho (8 segundos)
                     setTimeout(() => {
-                        sceneDashboard.classList.remove('active');
-                        sceneTrack.classList.add('active');
-                        racingCar.classList.add('animate-car'); // Engata e acelera
-                    }, 4000);
-
-                    // === ATO 3: O CLÍMAX DA LUZ (Aos 7.2 Segundos) ===
-                    setTimeout(() => {
-                        splashScreen.classList.remove('shake-intense'); 
-                        flash.classList.add('ignite-flash'); // Tela cega de luz vermelha
-                    }, 7200);
-
-                    // === FIM: REVELA O SITE (Aos 8 Segundos) ===
-                    setTimeout(() => {
-                        flash.classList.remove('ignite-flash'); // Apaga o flash
-                        splashScreen.style.opacity = '0';       // Apaga o fundo preto
-                        document.body.classList.remove('locked-scroll'); // Destrava rolagem do site
+                        splashScreen.style.opacity = '0'; // A tela inteira fica invisível
+                        document.body.classList.remove('locked-scroll'); // Destrava o site por baixo
                         
-                        // Some do código para você poder clicar no site livremente
+                        // Remove o splash totalmente do DOM para não atrapalhar o clique
                         setTimeout(() => {
                             splashScreen.style.display = 'none'; 
                         }, 800);
@@ -895,8 +812,7 @@
             }
 
 
-            // ================= 2. JAVASCRIPT DO SITE ORIGINAL =================
-            // Acordeão FAQ
+            // ================= 2. JAVASCRIPT DO SITE ORIGINAL (FAQ, TIMER) =================
             document.querySelectorAll('.faq-header').forEach(header => {
                 header.addEventListener('click', () => {
                     const parent = header.parentElement;
@@ -942,7 +858,6 @@
                     sEl.innerText = seconds.toString().padStart(2, '0');
                 }
             }
-
             setInterval(updateTimer, 1000);
             updateTimer();
         });
