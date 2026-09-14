@@ -41,7 +41,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Classe para travar a rolagem enquanto a tela de entrada estiver ativa */
+        /* Trava a rolagem na tela de entrada */
         body.locked-scroll {
             overflow: hidden !important;
         }
@@ -51,7 +51,7 @@
         img { max-width: 100%; height: auto; display: block; }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
-        /* ================= TELA DE ENTRADA (SPLASH SCREEN) ================= */
+        /* ================= TELA DE ENTRADA (SPLASH SCREEN - 8 SEGUNDOS) ================= */
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -79,7 +79,7 @@
         .splash-content {
             position: relative;
             z-index: 10;
-            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 1s cubic-bezier(0.5, 0, 0.2, 1);
         }
 
         .splash-title {
@@ -136,28 +136,57 @@
             color: var(--text-white);
             transform: scale(1.1);
             animation: none;
+            box-shadow: 0 0 40px rgba(255,0,0,0.8);
         }
 
-        /* Efeito Clarão Branco */
+        /* EFEITOS DE LUZES E VIBRAÇÃO (DURANTE OS 8 SEGUNDOS) */
         #flash-overlay {
             position: fixed;
             inset: 0;
-            background-color: #fff;
+            background-color: var(--primary-red);
             z-index: 10000;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease-in;
         }
-        .ignite-flash {
-            opacity: 1 !important;
-            transition: opacity 0.1s ease-out;
+
+        /* Luzes pulsantes simulando giro do motor / sirenes */
+        .breathe-red {
+            mix-blend-mode: overlay;
+            animation: breathe-red-anim 0.5s ease-in-out infinite alternate;
         }
-        .launch-forward {
-            opacity: 0;
-            transform: scale(1.4);
+        @keyframes breathe-red-anim {
+            0% { opacity: 0.1; box-shadow: inset 0 0 50px rgba(255,0,0,0.2); }
+            100% { opacity: 0.6; box-shadow: inset 0 0 250px rgba(255,0,0,0.9); }
         }
 
-        /* Animações da Entrada */
+        /* Flash de arrancada */
+        .ignite-flash {
+            background-color: #ff0000 !important;
+            opacity: 1 !important;
+            mix-blend-mode: normal !important;
+            transition: opacity 0.1s ease-out;
+        }
+
+        /* Tremor extremo da tela inteira antes da arrancada */
+        .shake-intense {
+            animation: extreme-shake 0.08s infinite;
+        }
+        @keyframes extreme-shake {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-3px, 2px) scale(1.01); }
+            50% { transform: translate(3px, -2px) scale(1); }
+            75% { transform: translate(-3px, -2px) scale(1.01); }
+            100% { transform: translate(2px, 3px) scale(1); }
+        }
+
+        /* Zoom da arrancada final */
+        .launch-forward {
+            opacity: 0;
+            transform: scale(2.5) translateY(-50px);
+        }
+
+        /* Animações de Entrada */
         @keyframes turn-on-neon {
             0%   { opacity: 0; text-shadow: none; }
             10%  { opacity: 1; text-shadow: none; }
@@ -181,74 +210,47 @@
 
 
         /* ================= COMPONENTES ORIGINAIS DO SITE ================= */
-        .btn {
-            display: block; width: 100%; padding: 14px; text-align: center; font-weight: 800;
-            text-transform: uppercase; border-radius: 6px; border: none; cursor: pointer;
-            font-size: 0.9rem; margin-bottom: 12px; transition: 0.3s ease;
-        }
+        .btn { display: block; width: 100%; padding: 14px; text-align: center; font-weight: 800; text-transform: uppercase; border-radius: 6px; border: none; cursor: pointer; font-size: 0.9rem; margin-bottom: 12px; transition: 0.3s ease; }
         .btn-red { background: var(--primary-red); color: white; }
         .btn-red:hover { background: #cc0000; box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
         .btn-outline { background: transparent; color: white; border: 1px solid var(--border-color); }
         .btn-outline:hover { border-color: var(--primary-red); color: var(--primary-red); }
 
         .section-header { margin-bottom: 25px; }
-        .section-subtitle {
-            color: var(--primary-red); font-size: 0.75rem; text-transform: uppercase;
-            font-weight: 800; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; margin-bottom: 5px;
-        }
+        .section-subtitle { color: var(--primary-red); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
         .section-subtitle::before { content: ""; height: 1px; width: 24px; background-color: var(--primary-red); }
         .section-title { font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 900; text-transform: uppercase; line-height: 1.1; }
 
         section { padding: 60px 0; border-bottom: 1px solid var(--border-color); background-color: var(--bg-section); }
 
-        /* ================= HEADER ================= */
-        header {
-            position: fixed; top: 0; width: 100%; padding: 12px 16px; display: flex;
-            justify-content: space-between; align-items: center; background: rgba(5, 5, 5, 0.9);
-            backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
+        header { position: fixed; top: 0; width: 100%; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .logo { font-size: 1.3rem; font-weight: 900; font-style: italic; letter-spacing: -0.5px; text-transform: uppercase; }
         .logo span { color: var(--primary-red); }
         .menu-btn { color: var(--text-white); font-size: 1.3rem; background: none; border: none; cursor: pointer; }
 
-        /* ================= 1. HERO SECTION ================= */
-        .hero {
-            position: relative;
-            padding-top: 90px;
-            padding-bottom: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 40%, var(--bg-dark) 100%),
-                        url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2000&auto=format&fit=crop') center 30%/cover no-repeat;
-            overflow: hidden;
-        }
-
+        .hero { position: relative; padding-top: 90px; padding-bottom: 0; background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 40%, var(--bg-dark) 100%), url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2000&auto=format&fit=crop') center 30%/cover no-repeat; overflow: hidden; }
         .hero-topbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 30px; }
         .hero-social { display: flex; align-items: center; gap: 14px; font-size: 1rem; }
         .hero-social a { color: #fff; opacity: 0.9; }
         .hero-social span { font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; color: var(--text-gray); }
         .hero-tagline { font-size: 0.7rem; font-weight: 900; font-style: italic; text-transform: uppercase; color: var(--primary-red); text-align: right; line-height: 1.3; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
-
         .hero-crown { text-align: center; color: var(--primary-red); font-size: 1.8rem; margin-bottom: 6px; filter: drop-shadow(0 0 8px rgba(255,0,0,0.6)); }
         .hero-title-wrap { text-align: center; margin-bottom: 25px; }
         .hero-main-title { font-size: clamp(2.4rem, 11vw, 5.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 0.95; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.9); }
         .hero-main-title .accent { color: var(--primary-red); }
         .hero-subtitle { font-size: clamp(0.7rem, 2vw, 0.95rem); font-weight: 800; letter-spacing: 4px; text-transform: uppercase; color: #ddd; margin-top: 8px; }
-
         .hero-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 20px; padding: 16px 0; margin-top: 10px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #eee; }
         .hero-strip span { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
         .hero-strip i { color: var(--primary-red); }
         .hero-strip .divider { color: #444; }
-
         .hero-actions-container { display: grid; grid-template-columns: 1fr; gap: 12px; padding: 20px 0 30px; position: relative; z-index: 5; }
         @media (min-width: 768px) { .hero-actions-container { grid-template-columns: repeat(3, 1fr); gap: 15px; } }
-
         .action-card { background: rgba(10, 10, 10, 0.85); border: 1.5px solid var(--primary-red); box-shadow: 0 0 18px rgba(255,0,0,0.15); border-radius: 10px; padding: 18px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .action-card:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(255,0,0,0.3); }
-
         .action-icon { font-size: 1.6rem; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; border-radius: 8px; flex-shrink: 0; color: var(--primary-red); background: rgba(255,0,0,0.12); }
         .action-info h3 { font-size: 1.02rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 2px; }
         .action-info p { font-size: 0.75rem; color: var(--text-gray); font-weight: 500; }
         .action-arrow { margin-left: auto; color: var(--text-gray); font-size: 0.9rem; }
-
         .hero-bottombar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08); }
         .hero-motto { font-size: 0.85rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: 1px; }
         .hero-motto span { color: var(--primary-red); }
@@ -256,7 +258,6 @@
         .hero-location i { color: var(--primary-red); }
         .hero-scroll-hint { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: var(--text-gray); text-align: center; padding-bottom: 16px; }
 
-        /* Mantenha o restante do CSS exatamente igual abaixo */
         .event-flyer { width: 100%; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color); }
         .event-details h3 { font-size: clamp(1.3rem, 4vw, 1.8rem); color: var(--primary-red); font-weight: 900; text-transform: uppercase; margin-bottom: 15px; line-height: 1.2; }
         .event-info-list li { display: flex; gap: 12px; margin-bottom: 10px; color: #ddd; font-weight: 600; font-size: 0.88rem; }
@@ -372,7 +373,7 @@
 </head>
 <body class="locked-scroll">
 
-    <!-- ================= EFEITOS DE ENTRADA (SPLASH SCREEN) ================= -->
+    <!-- ================= EFEITOS DE ENTRADA COM 8 SEGUNDOS (SPLASH SCREEN) ================= -->
     <div id="flash-overlay"></div>
     <div id="splash-screen" class="splash-scanlines">
         <div class="splash-content" id="splash-content">
@@ -387,7 +388,6 @@
     </div>
 
     <!-- ================= ÁUDIOS ================= -->
-    <!-- Seu som V8 Original -->
     <audio id="engine-sound" preload="auto">
         <source src="https://media.vocaroo.com/mp3/1dXEzQz8HZ93" type="audio/mpeg">
     </audio>
@@ -875,7 +875,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // ================= LÓGICA DO SPLASH SCREEN (NOVO) =================
+            // ================= 8 SEGUNDOS DE ARRANQUE (LÓGICA V8 E LUZES) =================
             const splashBtn = document.getElementById('ignite-btn');
             const engineSound = document.getElementById('engine-sound');
             const hoverSound = document.getElementById('hover-sound');
@@ -884,43 +884,50 @@
             const splashScreen = document.getElementById('splash-screen');
 
             // Ajustes de volume
-            if(engineSound) engineSound.volume = 0.8;
+            if(engineSound) engineSound.volume = 0.9;
             if(hoverSound) hoverSound.volume = 0.2;
 
             if(splashBtn) {
-                // Efeito sonoro no hover
+                // Toca som ambiente ao passar o mouse
                 splashBtn.addEventListener('mouseenter', () => {
                     hoverSound.currentTime = 0;
                     hoverSound.play().catch(() => {}); 
                 });
 
-                // Efeito no clique (O Arranque)
+                // CLIQUE: Inicia a contagem dos 8 Segundos
                 splashBtn.addEventListener('click', () => {
-                    // 1. Toca o V8
+                    // 1. Inicia o Áudio
                     engineSound.currentTime = 0;
-                    engineSound.play().catch(e => console.log('Áudio bloqueado.'));
+                    engineSound.play().catch(e => console.log('Áudio bloqueado pelo navegador.'));
                     
-                    // 2. Trava o botão visualmente
+                    // 2. Trava visualmente o botão
                     splashBtn.classList.add('igniting');
                     splashBtn.innerText = "ACELERANDO...";
                     
-                    // 3. Sincroniza o flash branco e a animação do letreiro com o giro do motor
-                    setTimeout(() => {
-                        flash.classList.add('ignite-flash');
-                        splashContent.classList.add('launch-forward');
-                    }, 500); 
+                    // 3. Ativa as luzes vermelhas pulsando e vibração no letreiro
+                    flash.classList.add('breathe-red');
+                    splashContent.classList.add('shake-intense');
 
-                    // 4. Fade out total e liberação do scroll
+                    // 4. Clímax aos 7 Segundos (O letreiro arranca e a luz estoura)
                     setTimeout(() => {
-                        flash.classList.remove('ignite-flash');
-                        splashScreen.style.opacity = '0'; // A tela de entrada vai ficando invisível
-                        document.body.classList.remove('locked-scroll'); // Destrava a rolagem do site original
+                        flash.classList.remove('breathe-red');
+                        flash.classList.add('ignite-flash'); // Flash vermelho sólido
                         
-                        // 5. Remove do DOM após a transição para não atrapalhar cliques futuros
+                        splashContent.classList.remove('shake-intense');
+                        splashContent.classList.add('launch-forward'); // Joga o logo pra frente
+                    }, 7000); // Exatos 7 Segundos
+
+                    // 5. Entrada Final aos 8 Segundos cravados (Fim do som)
+                    setTimeout(() => {
+                        flash.classList.remove('ignite-flash'); // Apaga o flash
+                        splashScreen.style.opacity = '0';       // Apaga o fundo de entrada
+                        document.body.classList.remove('locked-scroll'); // Libera rolagem
+                        
+                        // Remove o splash do caminho para não barrar cliques no site
                         setTimeout(() => {
                             splashScreen.style.display = 'none'; 
                         }, 800);
-                    }, 1300);
+                    }, 8000); // Exatos 8 Segundos
                 });
             }
 
@@ -985,8 +992,6 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.add('active');
-                // Se quiser travar o fundo enquanto o modal estiver aberto, pode reativar a classe
-                // document.body.classList.add('locked-scroll');
             }
         }
 
@@ -994,14 +999,12 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.remove('active');
-                // document.body.classList.remove('locked-scroll');
             }
         }
 
         window.onclick = function(event) {
             if (event.target.classList.contains('modal-overlay')) {
                 event.target.classList.remove('active');
-                // document.body.classList.remove('locked-scroll');
             }
         };
     </script>
