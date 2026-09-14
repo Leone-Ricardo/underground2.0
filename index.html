@@ -54,11 +54,10 @@
             object-fit: cover; z-index: 1;
         }
 
-        /* A foto do evento via tag img para não ter erro no GitHub */
+        /* A foto do evento que você mandou, cobrindo o vídeo até o momento do clique */
         #intro-bg-image {
             position: absolute; inset: 0; 
-            width: 100%; height: 100%; 
-            object-fit: cover; 
+            background: url('https://i.postimg.cc/SKb9k1Hf/underground-rj.jpg') center/cover no-repeat; 
             z-index: 2; transition: opacity 0.5s ease;
         }
 
@@ -264,13 +263,13 @@
     <!-- ================= SPLASH SCREEN (FOTO -> VÍDEO REAL) ================= -->
     <div id="splash-screen">
         
-        <!-- O VÍDEO NO FUNDO DA TELA (Caminho Local do GitHub) -->
+        <!-- O VÍDEO NO FUNDO DA TELA (Escondido atrás da foto inicialmente) -->
         <video id="splash-video" preload="auto" muted playsinline>
-            <source src="./assets/media/arrancada.mp4" type="video/mp4">
+            <source src="https://files.catbox.moe/xpgf9d.mp4" type="video/mp4">
         </video>
 
-        <!-- A FOTO DE ENTRADA VIA TAG IMG (Caminho Local do GitHub) -->
-        <img id="intro-bg-image" src="./assets/img/underground-rj.jpg" alt="Underground RJ Evento">
+        <!-- A FOTO DE ENTRADA -->
+        <div id="intro-bg-image"></div>
 
         <!-- Película Escura para destacar os textos/botão -->
         <div id="video-overlay"></div>
@@ -296,15 +295,15 @@
 
     </div>
 
-    <!-- ================= ÁUDIOS (Caminhos Locais do GitHub) ================= -->
+    <!-- ================= ÁUDIOS ================= -->
     <!-- Áudio 1: Arrancada principal do V8 (8 segundos) -->
     <audio id="engine-sound" preload="auto">
-        <source src="./assets/media/v8-engine.mp3" type="audio/mpeg">
+        <source src="https://media.vocaroo.com/mp3/1dXEzQz8HZ93" type="audio/mpeg">
     </audio>
     
     <!-- Áudio 2: Aquecimento rápido (Hover/Touch) -->
     <audio id="hover-rev-sound" preload="auto">
-        <source src="./assets/media/hover-rev.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/active_storage/sfx/1569/1569-preview.mp3" type="audio/mpeg">
     </audio>
 
     <!-- ================= CABEÇALHO DO SITE ORIGINAL ================= -->
